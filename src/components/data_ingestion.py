@@ -9,6 +9,7 @@ from dataclasses import dataclass
 
 from sklearn.model_selection import train_test_split
 from src.components.data_transformation import DataTransformation
+from src.utils import remove_outlier, plot_boxplot
 
 
 @dataclass
@@ -28,6 +29,9 @@ class DataIngestion:
             df = pd.read_csv("Notebook\Data\winequality-red.csv")
             logging.info("Read the dataset as dataframe")
 
+            df = remove_outlier(df)
+            plot_boxplot(df)
+
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path), exist_ok=True)
             df.to_csv(self.ingestion_config.raw_data_path, index=False, header=True)
 
@@ -46,6 +50,7 @@ class DataIngestion:
             raise CustomException(e, sys)
         
 if __name__ == "__main__":
+
     obj = DataIngestion()
     train_data, test_data = obj.initiate_data_ingestion()
 

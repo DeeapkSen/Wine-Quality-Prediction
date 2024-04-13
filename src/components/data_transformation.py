@@ -10,7 +10,8 @@ from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder
 from sklearn.pipeline import Pipeline
 from dataclasses import dataclass
-from src.utils import save_object
+from src.utils import save_object, remove_outlier
+
 
 @dataclass
 class DataTransformationConfig:
@@ -32,6 +33,11 @@ class DataTransformation:
                 'total sulfur dioxide', 'density',
                 'pH', 'sulphates', 'alcohol',
                 ]
+            # numeric_columns = df.select_dtypes(include=['float64']).columns
+            # for column in numeric_columns:
+            #     df = remove_outliers(df, column)
+            # df = df[numeric_columns]
+
             numeric_pipeline = Pipeline(
                 steps=[
                     ('imputer', SimpleImputer(strategy='median')),
