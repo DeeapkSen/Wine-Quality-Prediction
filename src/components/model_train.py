@@ -9,7 +9,7 @@ from sklearn.metrics import r2_score
 
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import SVC
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, ExtraTreesClassifier
 from sklearn.linear_model import LogisticRegression, ElasticNet
 from sklearn.neighbors import KNeighborsClassifier
 from xgboost import XGBClassifier
@@ -40,7 +40,7 @@ class ModelTrainer:
                 'SVC' : SVC(),
                 'Random Forest' : RandomForestClassifier(),
                 'XGBClassifier' : XGBClassifier(),
-                # 'CatBoosting' : CatBoostClassifier(verbose=False),
+                'ExtraTreesClassifier' : ExtraTreesClassifier(),
                 'AdaBoost' : AdaBoostClassifier(),
                 'ElasticNet' : ElasticNet(),
             }
@@ -69,9 +69,9 @@ class ModelTrainer:
                     'alpha' : [0.2, 0.4, 0.6, 0.8, 0.9],
                     'l1_ratio' : [0.5]
                     },
-                'CatBoosting': {
-                    'depth' : [6, 8, 10],
-                    'learning_rate' : [.1, .01, .05, .001]
+                'ExtraTreesClassifier': {
+                    'criterion': ['gini', 'entropy', 'log_loss'],
+                    'n_estimators' : [8, 16, 32, 64, 128, 256]
                     },
                 'AdaBoost' :{
                     'learning_rate' : [.1, .01, .05, .001],
@@ -106,7 +106,7 @@ class ModelTrainer:
             predicted = best_model.predict(X_test)
             scores = best_model.score(X_test, y_test)
 
-            return scores
+            return scores, best_model_name
 
         except Exception as e:
             raise CustomException(e, sys)

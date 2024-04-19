@@ -18,7 +18,7 @@ def evalute_model(X_train, y_train, X_test, y_test, models, param):
             model = list(models.values())[i]
             params = param[list(models.keys())[i]]
 
-            gridsearch = GridSearchCV(model, params, cv=3)
+            gridsearch = GridSearchCV(model, params, cv=5)
             gridsearch.fit(X_train, y_train)
 
             model.set_params(**gridsearch.best_params_)
@@ -38,9 +38,6 @@ def evalute_model(X_train, y_train, X_test, y_test, models, param):
         raise CustomException(e, sys)
     
 
-
-
-
 def save_object(file_path, obj):
     try:
         dir_path = os.path.dirname(file_path)
@@ -52,17 +49,18 @@ def save_object(file_path, obj):
     except Exception as e:
         raise CustomException(e, sys)
     
-# def plot_boxplot(data):
-#     plt.figure(figsize=(10, 6))
-#     plt.subplot(1, 2, 1)
-#     plt.boxplot(data)
-#     plt.title('Outliers')
-    
-#     plt.show()
+def plot_boxplot(data):
+    plt.figure(figsize=(10, 6))
+    plt.subplot(1, 2, 1)
+    plt.boxplot(data)
+    plt.title('Outliers')
+    # plt.show()
+
 def target_label(df):
-    df['quality'] = df['quality'].replace(3, 7)
-    df['quality'] = df['quality'].replace(4, 7)
-    df['quality'] = df['quality'].replace(8, 7)
+    df['quality'] = df['quality'].replace(3, 5)
+    df['quality'] = df['quality'].replace(4, 5)
+    df['quality'] = df['quality'].replace(7, 6)
+    df['quality'] = df['quality'].replace(8, 6)
     return df
 
 def outliers(col):

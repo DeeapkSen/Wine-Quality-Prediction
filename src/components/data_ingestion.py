@@ -10,7 +10,7 @@ from dataclasses import dataclass
 
 from sklearn.model_selection import train_test_split
 from src.components.data_transformation import DataTransformation
-from src.utils import remove_outlier, target_label
+from src.utils import remove_outlier, target_label, plot_boxplot
 from src.components.model_train import ModelTrainer, ModelTrainerConfig
 
 warnings.filterwarnings('ignore')
@@ -33,10 +33,12 @@ class DataIngestion:
             df = pd.read_csv("Notebook\Data\winequality-red.csv")
             logging.info("Read the dataset as dataframe")
 
+
             target = target_label(df) 
 
             df = remove_outlier(target)
-            # plot_boxplot(df)
+
+            plot_boxplot(df)
 
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path), exist_ok=True)
             df.to_csv(self.ingestion_config.raw_data_path, index=False, header=True)
