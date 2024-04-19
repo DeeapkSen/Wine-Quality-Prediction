@@ -2,6 +2,7 @@ import sys
 import os
 import numpy as np
 import pandas as pd
+import warnings
 
 from src.exception import CustomException
 from src.logger import logging
@@ -9,7 +10,10 @@ from dataclasses import dataclass
 
 from sklearn.model_selection import train_test_split
 from src.components.data_transformation import DataTransformation
-from src.utils import remove_outlier, plot_boxplot
+from src.utils import remove_outlier, target_label
+from src.components.model_train import ModelTrainer, ModelTrainerConfig
+
+warnings.filterwarnings('ignore')
 
 
 @dataclass
@@ -29,8 +33,10 @@ class DataIngestion:
             df = pd.read_csv("Notebook\Data\winequality-red.csv")
             logging.info("Read the dataset as dataframe")
 
-            df = remove_outlier(df)
-            plot_boxplot(df)
+            target = target_label(df) 
+
+            df = remove_outlier(target)
+            # plot_boxplot(df)
 
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path), exist_ok=True)
             df.to_csv(self.ingestion_config.raw_data_path, index=False, header=True)
@@ -56,3 +62,6 @@ if __name__ == "__main__":
 
     data_transformation = DataTransformation()
     train_arr, test_arr, _ = data_transformation.initiate_data_tranformation(train_data, test_data)
+
+    modeltrainer = modeltrainer = ModelTrainer()
+    print(modeltrainer.initiate_model_trainer(train_arr, test_arr))
